@@ -1,0 +1,19 @@
+{
+  "name": "uni-mev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benrafalski/UNI-MEV.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benrafalski/UNI-MEV/issues"
+  },
+  "homepage": "https://github.com/benrafalski/UNI-MEV#readme"
+}
