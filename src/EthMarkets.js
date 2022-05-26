@@ -20,34 +20,34 @@ export abstract class EthMarket {
     return this._tokens;
   }
 
-  get marketAddress(): string {
+  get marketAddress(){
     return this._marketAddress;
   }
 
-  get protocol(): string {
+  get protocol(){
     return this._protocol;
   }
 
-  protected readonly _tokens: Array<string>;
-  protected readonly _marketAddress: string;
-  protected readonly _protocol: string;
+  protected readonly _tokens;
+  protected readonly _marketAddress;
+  protected readonly _protocol;
 
-  constructor(marketAddress: string, tokens: Array<string>, protocol: string) {
+  constructor(marketAddress, tokens, protocol) {
     this._marketAddress = marketAddress;
     this._tokens = tokens
     this._protocol = protocol;
   }
 
 
-  abstract getTokensOut(tokenIn: string, tokenOut: string, amountIn: BigNumber): BigNumber;
+  getTokensOut(tokenIn, tokenOut, amountIn);
 
-  abstract getTokensIn(tokenIn: string, tokenOut: string, amountOut: BigNumber): BigNumber;
+  getTokensIn(tokenIn, tokenOut, amountOut);
 
-  abstract sellTokensToNextMarket(tokenIn: string, amountIn: BigNumber, ethMarket: EthMarket): Promise<MultipleCallData>
+  sellTokensToNextMarket(tokenIn, amountIn, ethMarket)
 
-  abstract sellTokens(tokenIn: string, amountIn: BigNumber, recipient: string): Promise<string>
+  sellTokens(tokenIn, amountIn, recipient)
 
-  abstract receiveDirectly(tokenAddress: string): boolean;
+  receiveDirectly(tokenAddress);
 
-  abstract prepareReceive(tokenAddress: string, amountIn: BigNumber): Promise<Array<CallDetails>>
+  prepareReceive(tokenAddress, amountIn)
 }
