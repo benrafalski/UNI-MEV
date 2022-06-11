@@ -5,12 +5,12 @@ import { WETH_ADDRESS } from "./addresses";
 import { EthMarket } from "./EthMarket";
 import { ETHER, bigNumberToDecimal } from "./utils";
 
-export interface CrossedMarketDetails {
-  profit: BigNumber,
-  volume: BigNumber,
-  tokenAddress: string,
-  buyFromMarket: EthMarket,
-  sellToMarket: EthMarket,
+export class CrossedMarketDetails {
+  profit,
+  volume,
+  tokenAddress,
+  buyFromMarket,
+  sellToMarket,
 }
 
 export type MarketsByToken = { [tokenAddress: string]: Array<EthMarket> }
@@ -67,17 +67,17 @@ export function getBestCrossedMarket(crossedMarkets: Array<EthMarket>[], tokenAd
 }
 
 export class Arbitrage {
-  private flashbotsProvider: FlashbotsBundleProvider;
-  private bundleExecutorContract: Contract;
-  private executorWallet: Wallet;
+  flashbotsProvider;
+  bundleExecutorContract;
+  executorWallet;
 
-  constructor(executorWallet: Wallet, flashbotsProvider: FlashbotsBundleProvider, bundleExecutorContract: Contract) {
+  constructor(executorWallet, flashbotsProvider, bundleExecutorContract) {
     this.executorWallet = executorWallet;
     this.flashbotsProvider = flashbotsProvider;
     this.bundleExecutorContract = bundleExecutorContract;
   }
 
-  static printCrossedMarket(crossedMarket: CrossedMarketDetails): void {
+  static printCrossedMarket(crossedMarket){
     const buyTokens = crossedMarket.buyFromMarket.tokens
     const sellTokens = crossedMarket.sellToMarket.tokens
     console.log(
@@ -91,12 +91,12 @@ export class Arbitrage {
   }
 
 
-  async evaluateMarkets(marketsByToken: MarketsByToken): Promise<Array<CrossedMarketDetails>> {
+  async evaluateMarkets(marketsByToken) {
     const bestCrossedMarkets = new Array<CrossedMarketDetails>()
 
     for (const tokenAddress in marketsByToken) {
       const markets = marketsByToken[tokenAddress]
-      const pricedMarkets = _.map(markets, (ethMarket: EthMarket) => {
+      const pricedMarkets = _.map(markets, (ethMarket) => {
         return {
           ethMarket: ethMarket,
           buyTokenPrice: ethMarket.getTokensIn(tokenAddress, WETH_ADDRESS, ETHER.div(100)),
@@ -123,7 +123,7 @@ export class Arbitrage {
   }
 
   // TODO: take more than 1
-  async takeCrossedMarkets(bestCrossedMarkets: CrossedMarketDetails[], blockNumber: number, minerRewardPercentage: number): Promise<void> {
+  async takeCrossedMarkets(bestCrossedMarkets, blockNumber, minerRewardPercentage) {
     for (const bestCrossedMarket of bestCrossedMarkets) {
 
       console.log("Send this much WETH", bestCrossedMarket.volume.toString(), "get this much profit", bestCrossedMarket.profit.toString())
@@ -131,8 +131,8 @@ export class Arbitrage {
       const inter = bestCrossedMarket.buyFromMarket.getTokensOut(WETH_ADDRESS, bestCrossedMarket.tokenAddress, bestCrossedMarket.volume)
       const sellCallData = await bestCrossedMarket.sellToMarket.sellTokens(bestCrossedMarket.tokenAddress, inter, this.bundleExecutorContract.address);
 
-      const targets: Array<string> = [...buyCalls.targets, bestCrossedMarket.sellToMarket.marketAddress]
-      const payloads: Array<string> = [...buyCalls.data, sellCallData]
+      const targets = [...buyCalls.targets, bestCrossedMarket.sellToMarket.marketAddress]
+      const payloads = [...buyCalls.data, sellCallData]
       console.log({targets, payloads})
       const minerReward = bestCrossedMarket.profit.mul(minerRewardPercentage).div(100);
       const transaction = await this.bundleExecutorContract.populateTransaction.uniswapWeth(bestCrossedMarket.volume, minerReward, targets, payloads, {
