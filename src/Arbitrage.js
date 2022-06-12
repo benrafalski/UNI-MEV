@@ -13,7 +13,7 @@ export class CrossedMarketDetails {
   sellToMarket,
 }
 
-export type MarketsByToken = { [tokenAddress: string]: Array<EthMarket> }
+export type MarketsByToken = {[tokenAddress]}
 
 // TODO: implement binary search (assuming linear/exponential global maximum profitability)
 const TEST_VOLUMES = [
@@ -28,8 +28,8 @@ const TEST_VOLUMES = [
   ETHER.mul(10),
 ]
 
-export function getBestCrossedMarket(crossedMarkets: Array<EthMarket>[], tokenAddress: string): CrossedMarketDetails | undefined {
-  let bestCrossedMarket: CrossedMarketDetails | undefined = undefined;
+export function getBestCrossedMarket(crossedMarkets, tokenAddress) {
+  let bestCrossedMarket = undefined;
   for (const crossedMarket of crossedMarkets) {
     const sellToMarket = crossedMarket[0]
     const buyFromMarket = crossedMarket[1]
