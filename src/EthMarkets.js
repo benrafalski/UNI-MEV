@@ -1,22 +1,22 @@
 import { BigNumber } from "ethers";
 
-export interface TokenBalances {
-  [tokenAddress: string]: BigNumber
+export class TokenBalances {
+  [tokenAddress];
 }
 
-export interface MultipleCallData {
-  targets: Array<string>
-  data: Array<string>
+export class MultipleCallData {
+  targets;
+  data;
 }
 
-export interface CallDetails {
-  target: string;
-  data: string;
-  value?: BigNumber;
+export class CallDetails {
+  target;
+  data;
+  value;
 }
 
-export abstract class EthMarket {
-  get tokens(): Array<string> {
+export class EthMarket {
+  get tokens() {
     return this._tokens;
   }
 
@@ -28,9 +28,9 @@ export abstract class EthMarket {
     return this._protocol;
   }
 
-  protected readonly _tokens;
-  protected readonly _marketAddress;
-  protected readonly _protocol;
+  _tokens;
+  _marketAddress;
+  _protocol;
 
   constructor(marketAddress, tokens, protocol) {
     this._marketAddress = marketAddress;

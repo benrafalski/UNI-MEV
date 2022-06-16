@@ -6,14 +6,14 @@ import { EthMarket } from "./EthMarket";
 import { ETHER, bigNumberToDecimal } from "./utils";
 
 export class CrossedMarketDetails {
-  profit,
-  volume,
-  tokenAddress,
-  buyFromMarket,
-  sellToMarket,
+  profit;
+  volume;
+  tokenAddress;
+  buyFromMarket;
+  sellToMarket;
 }
 
-export type MarketsByToken = {[tokenAddress]}
+// export type MarketsByToken = {[tokenAddress]}
 
 // TODO: implement binary search (assuming linear/exponential global maximum profitability)
 const TEST_VOLUMES = [
@@ -92,7 +92,7 @@ export class Arbitrage {
 
 
   async evaluateMarkets(marketsByToken) {
-    const bestCrossedMarkets = new Array<CrossedMarketDetails>()
+    const bestCrossedMarkets = new Array()
 
     for (const tokenAddress in marketsByToken) {
       const markets = marketsByToken[tokenAddress]
@@ -104,7 +104,7 @@ export class Arbitrage {
         }
       });
 
-      const crossedMarkets = new Array<Array<EthMarket>>()
+      const crossedMarkets = new Array()
       for (const pricedMarket of pricedMarkets) {
         _.forEach(pricedMarkets, pm => {
           if (pm.sellTokenPrice.gt(pricedMarket.buyTokenPrice)) {
